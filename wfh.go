@@ -116,8 +116,12 @@ func getDateString() *string {
   return &dateString
 }
 
-func calendarIdFromFile() string {
-  return os.Getenv("PRODUCT_OOO_CALENDAR_ID")
+func calendarIdFromEnv() string {
+  return os.Getenv("PRODUCT_WFH_CALENDAR_ID")
+}
+
+func nameFromEnv() string {
+  return os.Getenv("WFH_DISPLAY_CALENDAR_NAME")
 }
 
 func main() {
@@ -149,7 +153,7 @@ func main() {
   dateString := getDateString()
 
   event := &calendar.Event{
-    Summary: "Max K WFH",
+    Summary: nameFromEnv() + " WFH",
     Location: "Home",
     Description: "Working from home",
     Start: &calendar.EventDateTime{
@@ -160,7 +164,7 @@ func main() {
     },
   }
 
-  calendarId := calendarIdFromFile()
+  calendarId := calendarIdFromEnv()
   event, err = srv.Events.Insert(calendarId, event).Do()
   if err != nil {
     log.Fatalf("Unable to create event. %v\n", err)
